@@ -1,0 +1,26 @@
+package schemaValidation;
+
+import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
+import org.everit.json.schema.loader.SchemaLoader;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+public class Validation {
+	public static void main(String[] args) {
+		try {
+		JSONObject rawSchema = new JSONObject(new JSONTokener(Validation.class.getResourceAsStream("/info.json")));
+		JSONObject Schema = new JSONObject(new JSONTokener(Validation.class.getResourceAsStream("/Scema.json")));
+		Schema schema = SchemaLoader.load(Schema);
+		
+		schema.validate(rawSchema);
+		System.out.println("done");
+		}catch (ValidationException e) {
+			  System.out.println(e.getMessage());
+			  e.getCausingExceptions().stream()
+			      .map(ValidationException::getMessage)
+			      .forEach(System.out::println);
+			}
+	}
+	
+}
